@@ -5,16 +5,8 @@ import './App.css';
 export default function App() {
   const [language, setLanguage] = useState('en');
   const [activeCategory, setActiveCategory] = useState('all');
-  const [cart, setCart] = useState([]);
-  const [cartOpen, setCartOpen] = useState(false);
   const [menuModalOpen, setMenuModalOpen] = useState(false);
-  const [receiptModalOpen, setReceiptModalOpen] = useState(false);
-  const [receiptInfo, setReceiptInfo] = useState({ orderId: '', time: '', total: 0 });
-  const [toasts, setToasts] = useState([]);
   const [headerScrolled, setHeaderScrolled] = useState(false);
-
-  // Maintain custom inputs for each menu item card
-  const [itemSelections, setItemSelections] = useState({});
 
   // Monitor scroll for sticky header styling
   useEffect(() => {
@@ -29,170 +21,11 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Set default values for customizations when menu loads
-  useEffect(() => {
-    const initialSelections = {};
-    menuData.forEach(item => {
-      if (item.customType === 'spiciness') {
-        initialSelections[item.id] = { spice: 'mild' };
-      } else if (item.customType === 'sandwich') {
-        initialSelections[item.id] = { pineapple: false, cheese: false };
-      } else if (item.customType === 'combo-sandwich') {
-        initialSelections[item.id] = { pineapple: false, cheese: false, upgradeBBQ: false };
-      }
-    });
-    setItemSelections(initialSelections);
-  }, []);
-
   const t = translations[language];
 
   // Helper to change language
   const changeLanguage = (lang) => {
     setLanguage(lang);
-  };
-
-  // Helper to trigger toast notifications
-  const triggerToast = () => {
-    const newToast = { id: Date.now(), message: t.toastAdded };
-    setToasts(prev => [...prev, newToast]);
-    setTimeout(() => {
-      setToasts(prev => prev.filter(toast => toast.id !== newToast.id));
-    }, 3000);
-  };
-
-  // Handle option changes
-  const handleRadioChange = (itemId, val) => {
-    setItemSelections(prev => ({
-      ...prev,
-      [itemId]: { ...prev[itemId], spice: val }
-    }));
-  };
-
-  const handleCheckboxChange = (itemId, optionKey) => {
-    setItemSelections(prev => ({
-      ...prev,
-      [itemId]: { ...prev[itemId], [optionKey]: !prev[itemId][optionKey] }
-    }));
-  };
-
-  // Add to Cart
-  const addToOrder = (itemId) => {
-    const item = menuData.find(m => m.id === itemId);
-    if (!item) return;
-
-    let customizedTextEN = [];
-    let customizedTextZH = [];
-    let addedPrice = 0;
-
-    const select = itemSelections[itemId] || {};
-
-    if (item.customType === 'spiciness') {
-      const spiceVal = select.spice || 'mild';
-      if (spiceVal === 'spicy') {
-        customizedTextEN.push("Spicy");
-        customizedTextZH.push("辣");
-      } else {
-        customizedTextEN.push("Mild");
-        customizedTextZH.push("不辣");
-      }
-    } else if (item.customType === 'sandwich' || item.customType === 'combo-sandwich') {
-      if (select.pineapple) {
-        customizedTextEN.push("Add Pineapple (+$1.00)");
-        customizedTextZH.push("加菠萝 (+$1.00)");
-        addedPrice += 1.00;
-      }
-      if (select.cheese) {
-        customizedTextEN.push("Add Cheese (+$1.50)");
-        customizedTextZH.push("加芝士 (+$1.50)");
-        addedPrice += 1.50;
-      }
-      if (select.upgradeBBQ) {
-        customizedTextEN.push("BBQ Upgrade (+$1.00)");
-        customizedTextZH.push("升级BBQ烧烤酱 (+$1.00)");
-        addedPrice += 1.00;
-      }
-    }
-
-    const uniqueCustomKey = customizedTextEN.join(" | ");
-    const itemTotalPrice = item.basePrice + addedPrice;
-
-    // Check if duplicate exists
-    setCart(prevCart => {
-      const existingIndex = prevCart.findIndex(
-        c => c.id === itemId && c.customKey === uniqueCustomKey
-      );
-
-      if (existingIndex > -1) {
-        const updated = [...prevCart];
-        updated[existingIndex].qty += 1;
-        return updated;
-      } else {
-        return [
-          ...prevCart,
-          {
-            id: itemId,
-            nameEN: item.names.en,
-            nameZH: item.names.zh,
-            basePrice: item.basePrice,
-            customPrice: addedPrice,
-            totalSinglePrice: itemTotalPrice,
-            qty: 1,
-            customKey: uniqueCustomKey,
-            customEN: customizedTextEN,
-            customZH: customizedTextZH
-          }
-        ];
-      }
-    });
-
-    triggerToast();
-  };
-
-  // Modify cart item quantity
-  const updateCartQty = (index, change) => {
-    setCart(prevCart => {
-      const updated = [...prevCart];
-      updated[index].qty += change;
-      if (updated[index].qty <= 0) {
-        updated.splice(index, 1);
-      }
-      return updated;
-    });
-  };
-
-  // Remove item from cart
-  const removeCartItem = (index) => {
-    setCart(prevCart => prevCart.filter((_, i) => i !== index));
-  };
-
-  // Cart Calculations
-  const cartQtyCount = cart.reduce((acc, curr) => acc + curr.qty, 0);
-  const subtotal = cart.reduce((acc, curr) => acc + (curr.totalSinglePrice * curr.qty), 0);
-  const tax = subtotal * 0.08;
-  const total = subtotal + tax;
-
-  // Checkout Receipt Trigger
-  const handleCheckout = () => {
-    if (cart.length === 0) return;
-
-    const orderNumber = "SC-" + Math.floor(1000 + Math.random() * 9000);
-    const now = new Date();
-    now.setMinutes(now.getMinutes() + 20);
-    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-    setReceiptInfo({
-      orderId: orderNumber,
-      time: timeStr,
-      total: total
-    });
-
-    setCartOpen(false);
-    setReceiptModalOpen(true);
-  };
-
-  const handleCloseReceipt = () => {
-    setReceiptModalOpen(false);
-    setCart([]);
   };
 
   // Filter categories
@@ -216,7 +49,7 @@ export default function App() {
             <li><a href="#menu-section" className="nav-link" onClick={() => changeLanguage('zh')}>中文</a></li>
           </ul>
           
-          <div class="nav-actions">
+          <div className="nav-actions">
             <div className="lang-toggle">
               <button 
                 className={`lang-btn ${language === 'en' ? 'active' : ''}`}
@@ -227,11 +60,6 @@ export default function App() {
                 onClick={() => changeLanguage('zh')}
               >中文</button>
             </div>
-            
-            <button className="cart-toggle-btn" onClick={() => setCartOpen(true)} aria-label="Open Shopping Cart">
-              <i className="fas fa-shopping-basket"></i>
-              <span className="cart-count">{cartQtyCount}</span>
-            </button>
           </div>
         </div>
       </header>
@@ -271,7 +99,7 @@ export default function App() {
       {/* Catalog Menu Area */}
       <main className="container section-padding" id="menu-section">
         <h2 className="section-title">{t.categoriesTitle}</h2>
-        <p class="section-subtitle">{t.categoriesSubtitle}</p>
+        <p className="section-subtitle">{t.categoriesSubtitle}</p>
         
         {/* Scanned sheet box indicator */}
         <div className="menu-image-trigger-box">
@@ -308,10 +136,27 @@ export default function App() {
           >{t.catCombos}</button>
         </div>
 
+        {/* General Combos note banner */}
+        {activeCategory === 'combos' && (
+          <div style={{
+            backgroundColor: 'var(--yellow-light)',
+            borderLeft: '5px solid var(--yellow-primary)',
+            padding: '15px 20px',
+            borderRadius: 'var(--radius-sm)',
+            marginBottom: '30px',
+            fontSize: '0.9rem',
+            fontWeight: '600',
+            color: 'var(--brown-dark)',
+            textAlign: 'left'
+          }}>
+            <i className="fas fa-info-circle" style={{ marginRight: '8px', color: 'var(--brown-medium)' }}></i>
+            {t.comboNote}
+          </div>
+        )}
+
         {/* Items menu grid list */}
         <div className="menu-grid">
           {filteredMenu.map(item => {
-            const select = itemSelections[item.id] || {};
             const comboLetter = item.comboLetter;
             const badgeText = item.badge ? item.badge[language] : null;
 
@@ -332,63 +177,20 @@ export default function App() {
                   </div>
                   <p className="menu-card-description">{item.descriptions[language]}</p>
                   
-                  {/* Embedded customization options */}
+                  {/* Static customization descriptors */}
                   {item.customType === 'spiciness' && (
-                    <div className="menu-card-customizer">
-                      <div className="customizer-title">{t.customSpicy}</div>
-                      <div className="radio-group">
-                        <div className="customizer-option">
-                          <label>
-                            <input 
-                              type="radio" 
-                              name={`spice-${item.id}`} 
-                              value="mild" 
-                              checked={select.spice !== 'spicy'} 
-                              onChange={() => handleRadioChange(item.id, 'mild')}
-                            />
-                            <span>{t.customSpicyMild}</span>
-                          </label>
-                        </div>
-                        <div className="customizer-option">
-                          <label>
-                            <input 
-                              type="radio" 
-                              name={`spice-${item.id}`} 
-                              value="spicy" 
-                              checked={select.spice === 'spicy'} 
-                              onChange={() => handleRadioChange(item.id, 'spicy')}
-                            />
-                            <span>{t.customSpicyHot}</span>
-                          </label>
-                        </div>
-                      </div>
+                    <div className="menu-card-customizer" style={{ fontStyle: 'italic', fontWeight: '500', color: 'var(--brown-medium)' }}>
+                      <i className="fas fa-pepper-hot" style={{ marginRight: '6px' }}></i>
+                      {t.mildSpicyOption}
                     </div>
                   )}
 
                   {item.customType === 'sandwich' && (
                     <div className="menu-card-customizer">
                       <div className="customizer-title">{t.customAddons}</div>
-                      <div className="customizer-options">
-                        <div className="customizer-option">
-                          <label>
-                            <input 
-                              type="checkbox" 
-                              checked={!!select.pineapple} 
-                              onChange={() => handleCheckboxChange(item.id, 'pineapple')}
-                            />
-                            <span>{t.customPineapple}</span>
-                          </label>
-                        </div>
-                        <div className="customizer-option">
-                          <label>
-                            <input 
-                              type="checkbox" 
-                              checked={!!select.cheese} 
-                              onChange={() => handleCheckboxChange(item.id, 'cheese')}
-                            />
-                            <span>{t.customCheese}</span>
-                          </label>
-                        </div>
+                      <div style={{ display: 'flex', gap: '15px', color: 'var(--brown-medium)', fontWeight: '600', fontSize: '0.8rem' }}>
+                        <span><i className="fas fa-plus" style={{ fontSize: '0.7rem', marginRight: '4px' }}></i> {t.customPineapple}</span>
+                        <span><i className="fas fa-plus" style={{ fontSize: '0.7rem', marginRight: '4px' }}></i> {t.customCheese}</span>
                       </div>
                     </div>
                   )}
@@ -396,47 +198,15 @@ export default function App() {
                   {item.customType === 'combo-sandwich' && (
                     <div className="menu-card-customizer">
                       <div className="customizer-title">{t.customAddons}</div>
-                      <div className="customizer-options">
-                        <div className="customizer-option">
-                          <label>
-                            <input 
-                              type="checkbox" 
-                              checked={!!select.pineapple} 
-                              onChange={() => handleCheckboxChange(item.id, 'pineapple')}
-                            />
-                            <span>{t.customPineapple}</span>
-                          </label>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', color: 'var(--brown-medium)', fontWeight: '600', fontSize: '0.8rem' }}>
+                        <div style={{ display: 'flex', gap: '15px' }}>
+                          <span><i className="fas fa-plus" style={{ fontSize: '0.7rem', marginRight: '4px' }}></i> {t.customPineapple}</span>
+                          <span><i className="fas fa-plus" style={{ fontSize: '0.7rem', marginRight: '4px' }}></i> {t.customCheese}</span>
                         </div>
-                        <div className="customizer-option">
-                          <label>
-                            <input 
-                              type="checkbox" 
-                              checked={!!select.cheese} 
-                              onChange={() => handleCheckboxChange(item.id, 'cheese')}
-                            />
-                            <span>{t.customCheese}</span>
-                          </label>
-                        </div>
-                        <div className="customizer-option">
-                          <label>
-                            <input 
-                              type="checkbox" 
-                              checked={!!select.upgradeBBQ} 
-                              onChange={() => handleCheckboxChange(item.id, 'upgradeBBQ')}
-                            />
-                            <span>{t.customUpgradeCombo}</span>
-                          </label>
-                        </div>
+                        <span><i className="fas fa-arrow-up" style={{ fontSize: '0.7rem', marginRight: '4px' }}></i> {t.customUpgradeCombo}</span>
                       </div>
                     </div>
                   )}
-
-                  <div className="menu-card-actions">
-                    <button className="btn-add-to-cart" onClick={() => addToOrder(item.id)}>
-                      <i className="fas fa-plus-circle"></i>
-                      <span>{t.addToCart}</span>
-                    </button>
-                  </div>
                 </div>
               </div>
             );
@@ -480,9 +250,9 @@ export default function App() {
             </h4>
             <p>Your local choice for the crispiest, juiciest, and most delicious takeout fried chicken in town.</p>
             <div className="social-links">
-              <a href="#" className="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-              <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-              <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+              <a href="#" className="social-link" aria-label="Facebook"><i className="fab fa-facebook-f"></i></a>
+              <a href="#" className="social-link" aria-label="Instagram"><i className="fab fa-instagram"></i></a>
+              <a href="#" className="social-link" aria-label="Twitter"><i className="fab fa-twitter"></i></a>
             </div>
           </div>
           <div className="footer-col">
@@ -502,143 +272,12 @@ export default function App() {
         </div>
       </footer>
 
-      {/* Shopping Cart Side Drawer */}
-      <div className={`cart-overlay ${cartOpen ? 'open' : ''}`} onClick={(e) => e.target.classList.contains('cart-overlay') && setCartOpen(false)}>
-        <div className="cart-drawer">
-          <div className="cart-header">
-            <h3>{t.cartTitle}</h3>
-            <button className="btn-close-cart" onClick={() => setCartOpen(false)} aria-label="Close Shopping Cart">&times;</button>
-          </div>
-          
-          <div className="cart-body">
-            {cart.length === 0 ? (
-              <div className="cart-empty">
-                <i className="fas fa-shopping-basket cart-empty-icon"></i>
-                <p>{t.cartEmpty}</p>
-              </div>
-            ) : (
-              cart.map((cItem, index) => {
-                const itemCost = cItem.totalSinglePrice * cItem.qty;
-                const customNotes = language === 'en' ? cItem.customEN.join(", ") : cItem.customZH.join(", ");
-                const nameDisplay = language === 'en' ? cItem.nameEN : cItem.nameZH;
-
-                return (
-                  <div className="cart-item" key={cItem.id + '-' + cItem.customKey}>
-                    <div className="cart-item-header">
-                      <span className="cart-item-title">{nameDisplay}</span>
-                      <span className="cart-item-price">${itemCost.toFixed(2)}</span>
-                    </div>
-                    {customNotes && <div className="cart-item-customizations">{customNotes}</div>}
-                    <div className="cart-item-actions">
-                      <div className="qty-control">
-                        <button className="qty-btn" onClick={() => updateCartQty(index, -1)}>-</button>
-                        <span className="qty-val">{cItem.qty}</span>
-                        <button className="qty-btn" onClick={() => updateCartQty(index, 1)}>+</button>
-                      </div>
-                      <button className="btn-remove-item" onClick={() => removeCartItem(index)}>Remove</button>
-                    </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
-          
-          <div className="cart-footer">
-            <div className="cart-summary-line">
-              <span>{t.subtotal}</span>
-              <span>${subtotal.toFixed(2)}</span>
-            </div>
-            <div className="cart-summary-line">
-              <span>{t.tax}</span>
-              <span>${tax.toFixed(2)}</span>
-            </div>
-            <div className="cart-summary-line total">
-              <span>{t.total}</span>
-              <span>${total.toFixed(2)}</span>
-            </div>
-            <button 
-              className="btn-checkout" 
-              onClick={handleCheckout} 
-              disabled={cart.length === 0}
-            >
-              {t.checkout}
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* Menu Image Modal overlay */}
       <div className={`image-modal ${menuModalOpen ? 'open' : ''}`} onClick={(e) => (e.target.id === 'image-modal' || e.target.classList.contains('btn-close-modal')) && setMenuModalOpen(false)}>
         <div className="image-modal-content">
           <button className="btn-close-modal">&times;</button>
           <img src="images/menu-1.png" alt="Super Chicken Printed Menu Scanned Sheet" />
         </div>
-      </div>
-
-      {/* Checkout Success Receipt Sheet Modal */}
-      <div className={`receipt-modal ${receiptModalOpen ? 'open' : ''}`} onClick={(e) => e.target.id === 'receipt-modal' && handleCloseReceipt()}>
-        <div className="receipt-card">
-          <div className="receipt-header">
-            <h3>{t.receiptSuccess}</h3>
-            <p>Super Chicken Takeout</p>
-            <span className="receipt-success-badge"><i className="fas fa-check-circle"></i> Paid / Prep in Progress</span>
-          </div>
-          
-          <div className="receipt-body">
-            <div className="receipt-info-block">
-              <div className="receipt-info-row">
-                <span className="receipt-label">{t.receiptOrderNum}</span>
-                <span className="receipt-value">{receiptInfo.orderId}</span>
-              </div>
-              <div className="receipt-info-row">
-                <span className="receipt-label">{t.receiptTime}</span>
-                <span className="receipt-value">{receiptInfo.time}</span>
-              </div>
-            </div>
-            
-            <div className="receipt-items-list">
-              {cart.map((cItem, i) => {
-                const itemCost = cItem.totalSinglePrice * cItem.qty;
-                const customNotes = language === 'en' ? cItem.customEN.join(", ") : cItem.customZH.join(", ");
-                const nameDisplay = language === 'en' ? cItem.nameEN : cItem.nameZH;
-
-                return (
-                  <div style={{ marginBottom: '15px' }} key={i}>
-                    <div className="receipt-item-row">
-                      <span className="receipt-item-desc">{cItem.qty}x {nameDisplay}</span>
-                      <span className="receipt-item-p">${itemCost.toFixed(2)}</span>
-                    </div>
-                    {customNotes && <div className="receipt-item-subnotes">+ {customNotes}</div>}
-                  </div>
-                );
-              })}
-            </div>
-            
-            <div className="receipt-total-block">
-              <div className="receipt-total-row">
-                <span>{t.total}</span>
-                <span>${receiptInfo.total.toFixed(2)}</span>
-              </div>
-            </div>
-            
-            <div className="receipt-instructions">
-              <h5><i className="fas fa-info-circle"></i> {t.receiptInstructionsTitle}</h5>
-              <p>{t.receiptInstructions}</p>
-            </div>
-            
-            <button className="btn-done-receipt" onClick={handleCloseReceipt}>{t.receiptClose}</button>
-          </div>
-        </div>
-      </div>
-
-      {/* Floating Toast Alerts Stack */}
-      <div className="toast-container">
-        {toasts.map(toast => (
-          <div className="toast" key={toast.id}>
-            <i className="fas fa-check-circle"></i>
-            <span>{toast.message}</span>
-          </div>
-        ))}
       </div>
     </div>
   );

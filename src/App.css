@@ -689,13 +689,20 @@ header.scrolled {
 .info-section {
   background-color: var(--brown-dark);
   color: white;
-  padding: 60px 0;
+  padding: 80px 0;
+}
+
+.info-container-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  align-items: center;
 }
 
 .info-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 40px;
+  grid-template-columns: 1fr;
+  gap: 30px;
 }
 
 .info-item {
@@ -718,6 +725,27 @@ header.scrolled {
 
 .info-text p {
   color: rgba(255, 255, 255, 0.8);
+}
+
+.info-map {
+  width: 100%;
+  height: 350px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  border: 4px solid rgba(255, 255, 255, 0.08);
+  transition: var(--transition-normal);
+}
+
+.info-map:hover {
+  border-color: var(--yellow-primary);
+  transform: translateY(-2px);
+}
+
+.info-map iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
 
 /* Cart Drawer */
@@ -1277,6 +1305,10 @@ footer {
   .menu-image-trigger-box {
     flex-direction: column;
     text-align: center;
+  }
+  .info-container-layout {
+    grid-template-columns: 1fr;
+    gap: 40px;
   }
 }
 

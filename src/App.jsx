@@ -216,27 +216,41 @@ export default function App() {
 
       {/* Info Section */}
       <section className="info-section">
-        <div className="container info-grid">
-          <div className="info-item">
-            <div className="info-icon"><i className="fas fa-map-marker-alt"></i></div>
-            <div className="info-text">
-              <h4>{t.locationTitle}</h4>
-              <p>{t.locDesc}</p>
+        <div className="container info-container-layout">
+          <div className="info-grid">
+            <div className="info-item">
+              <div className="info-icon"><i className="fas fa-map-marker-alt"></i></div>
+              <div className="info-text">
+                <h4>{t.locationTitle}</h4>
+                <p>{t.locDesc}</p>
+              </div>
+            </div>
+            <div className="info-item">
+              <div className="info-icon"><i className="fas fa-clock"></i></div>
+              <div className="info-text">
+                <h4>{t.hoursTitle}</h4>
+                <p>{t.hoursDesc}</p>
+              </div>
+            </div>
+            <div className="info-item">
+              <div className="info-icon"><i className="fas fa-phone-alt"></i></div>
+              <div className="info-text">
+                <h4>{t.contactTitle}</h4>
+                <p>{t.contactDesc}</p>
+              </div>
             </div>
           </div>
-          <div className="info-item">
-            <div className="info-icon"><i className="fas fa-clock"></i></div>
-            <div className="info-text">
-              <h4>{t.hoursTitle}</h4>
-              <p>{t.hoursDesc}</p>
-            </div>
-          </div>
-          <div className="info-item">
-            <div className="info-icon"><i className="fas fa-phone-alt"></i></div>
-            <div className="info-text">
-              <h4>{t.contactTitle}</h4>
-              <p>{t.contactDesc}</p>
-            </div>
+          <div className="info-map">
+            <iframe 
+              src="https://www.google.com/maps?q=3517+Kennedy+Rd+%233,Scarborough,ON+M1V+4S4&amp;output=embed" 
+              width="100%" 
+              height="100%" 
+              style={{ border: 0 }} 
+              allowFullScreen="" 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Super Chicken Location Map"
+            ></iframe>
           </div>
         </div>
       </section>

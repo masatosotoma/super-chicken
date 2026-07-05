@@ -594,13 +594,20 @@
     .info-section {
       background-color: var(--brown-dark);
       color: white;
-      padding: 60px 0;
+      padding: 80px 0;
+    }
+
+    .info-container-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
     }
 
     .info-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 40px;
+      grid-template-columns: 1fr;
+      gap: 30px;
     }
 
     .info-item {
@@ -623,6 +630,27 @@
 
     .info-text p {
       color: rgba(255, 255, 255, 0.8);
+    }
+
+    .info-map {
+      width: 100%;
+      height: 350px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      border: 4px solid rgba(255, 255, 255, 0.08);
+      transition: var(--transition-normal);
+    }
+
+    .info-map:hover {
+      border-color: var(--yellow-primary);
+      transform: translateY(-2px);
+    }
+
+    .info-map iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
     }
 
     /* Original Menu Image Modal */
@@ -772,6 +800,10 @@
         flex-direction: column;
         text-align: center;
       }
+      .info-container-layout {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
     }
 
     @media (max-width: 768px) {
@@ -886,27 +918,41 @@
 
   <!-- Store Information Section -->
   <section class="info-section" id="info-section">
-    <div class="container info-grid">
-      <div class="info-item">
-        <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
-        <div class="info-text">
-          <h4 id="info-loc-title">Location & Pickup</h4>
-          <p id="info-loc-desc">123 Crispy Boulevard, Food Town</p>
+    <div class="container info-container-layout">
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+          <div class="info-text">
+            <h4 id="info-loc-title">Location & Pickup</h4>
+            <p id="info-loc-desc">3517 Kennedy Rd #3, Scarborough, ON M1V 4S4</p>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon"><i class="fas fa-clock"></i></div>
+          <div class="info-text">
+            <h4 id="info-hours-title">Business Hours</h4>
+            <p id="info-hours-desc">Monday - Sunday: 11:00 AM - 10:00 PM</p>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
+          <div class="info-text">
+            <h4 id="info-phone-title">Call for Orders</h4>
+            <p id="info-phone-desc">+1 (555) 123-4567</p>
+          </div>
         </div>
       </div>
-      <div class="info-item">
-        <div class="info-icon"><i class="fas fa-clock"></i></div>
-        <div class="info-text">
-          <h4 id="info-hours-title">Business Hours</h4>
-          <p id="info-hours-desc">Monday - Sunday: 11:00 AM - 10:00 PM</p>
-        </div>
-      </div>
-      <div class="info-item">
-        <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
-        <div class="info-text">
-          <h4 id="info-phone-title">Call for Orders</h4>
-          <p id="info-phone-desc">+1 (555) 123-4567</p>
-        </div>
+      <div class="info-map">
+        <iframe 
+          src="https://www.google.com/maps?q=3517+Kennedy+Rd+%233,Scarborough,ON+M1V+4S4&amp;output=embed" 
+          width="100%" 
+          height="100%" 
+          style="border:0;" 
+          allowfullscreen="" 
+          loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Super Chicken Location Map">
+        </iframe>
       </div>
     </div>
   </section>
@@ -927,7 +973,7 @@
       </div>
       <div class="footer-col">
         <h4 id="footer-loc-title">Location & Pickup</h4>
-        <p><i class="fas fa-map-marker-alt"></i> 123 Crispy Boulevard, Food Town</p>
+        <p><i class="fas fa-map-marker-alt"></i> 3517 Kennedy Rd #3, Scarborough, ON M1V 4S4</p>
         <p><i class="fas fa-phone-alt"></i> +1 (555) 123-4567</p>
         <p><i class="fas fa-envelope"></i> contact@superchicken.com</p>
       </div>
@@ -975,7 +1021,7 @@
         locationTitle: "Location & Pickup",
         hoursTitle: "Business Hours",
         contactTitle: "Call for Orders",
-        locDesc: "123 Crispy Boulevard, Food Town",
+        locDesc: "3517 Kennedy Rd #3, Scarborough, ON M1V 4S4",
         hoursDesc: "Monday - Sunday: 11:00 AM - 10:00 PM",
         contactDesc: "+1 (555) 123-4567",
         footerText: "© 2026 Super Chicken Takeout. All rights reserved.",
@@ -1007,7 +1053,7 @@
         locationTitle: "取餐地址",
         hoursTitle: "营业时间",
         contactTitle: "电话订餐",
-        locDesc: "美食城酥脆大道123号",
+        locDesc: "士嘉堡肯尼迪路3517号3号铺，邮编 M1V 4S4",
         hoursDesc: "周一至周日：上午 11:00 - 晚上 10:00",
         contactDesc: "+1 (555) 123-4567",
         footerText: "© 2026 超级炸鸡外卖。版权所有。",

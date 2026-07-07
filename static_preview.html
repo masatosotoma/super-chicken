@@ -974,13 +974,12 @@
       <div class="footer-col">
         <h4 id="footer-loc-title">Location & Pickup</h4>
         <p><i class="fas fa-map-marker-alt"></i> 3517 Kennedy Rd #3, Scarborough, ON M1V 4S4</p>
-        <p><i class="fas fa-phone-alt"></i> +1 (555) 123-4567</p>
+        <p><i class="fas fa-phone-alt"></i> <a href="tel:+16473909898" style="color: rgba(255, 255, 255, 0.7)">+1 (647) 390-9898</a></p>
         <p><i class="fas fa-envelope"></i> contact@superchicken.com</p>
       </div>
       <div class="footer-col">
         <h4 id="footer-hours-title">Business Hours</h4>
-        <p>Monday - Friday: 11:00 AM - 10:00 PM</p>
-        <p>Saturday - Sunday: 11:00 AM - 11:00 PM</p>
+        <p id="footer-hours-desc">Monday - Sunday: 11:30 AM - 12:00 AM</p>
       </div>
     </div>
     <div class="footer-bottom">
@@ -1023,7 +1022,7 @@
         contactTitle: "Call for Orders",
         locDesc: "3517 Kennedy Rd #3, Scarborough, ON M1V 4S4",
         hoursDesc: "Monday - Sunday: 11:00 AM - 10:00 PM",
-        contactDesc: "+1 (555) 123-4567",
+        contactDesc: "+1 (647) 390-9898",
         footerText: "© 2026 Super Chicken Takeout. All rights reserved.",
         customSpicy: "Spice Option:",
         customSpicyMild: "Mild / Spicy",
@@ -1055,7 +1054,7 @@
         contactTitle: "电话订餐",
         locDesc: "士嘉堡肯尼迪路3517号3号铺，邮编 M1V 4S4",
         hoursDesc: "周一至周日：上午 11:00 - 晚上 10:00",
-        contactDesc: "+1 (555) 123-4567",
+        contactDesc: "+1 (647) 390-9898",
         footerText: "© 2026 超级炸鸡外卖。版权所有。",
         customSpicy: "辣度选项：",
         customSpicyMild: "可选不辣 / 辣",
@@ -1368,6 +1367,7 @@
       document.getElementById("info-phone-desc").textContent = t.contactDesc;
       document.getElementById("footer-loc-title").textContent = t.locationTitle;
       document.getElementById("footer-hours-title").textContent = t.hoursTitle;
+      document.getElementById("footer-hours-desc").textContent = t.hoursDesc;
       document.getElementById("footer-copyright-text").textContent = t.footerText;
 
       // Update categories buttons

@@ -271,14 +271,13 @@ export default function App() {
           </div>
           <div className="footer-col">
             <h4>{t.locationTitle}</h4>
-            <p><i className="fas fa-map-marker-alt"></i> 123 Crispy Boulevard, Food Town</p>
-            <p><i className="fas fa-phone-alt"></i> +1 (555) 123-4567</p>
+            <p><i className="fas fa-map-marker-alt"></i> {t.locDesc}</p>
+            <p><i class="fas fa-phone-alt"></i> <a href="tel:+16473909898" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>+1 (647) 390-9898</a></p>
             <p><i className="fas fa-envelope"></i> contact@superchicken.com</p>
           </div>
           <div className="footer-col">
             <h4>{t.hoursTitle}</h4>
-            <p>Monday - Friday: 11:00 AM - 10:00 PM</p>
-            <p>Saturday - Sunday: 11:00 AM - 11:00 PM</p>
+            <p>{t.hoursDesc}</p>
           </div>
         </div>
         <div className="footer-bottom">

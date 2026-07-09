@@ -5,7 +5,6 @@ import './App.css';
 export default function App() {
   const [language, setLanguage] = useState('en');
   const [activeCategory, setActiveCategory] = useState('all');
-  const [menuModalOpen, setMenuModalOpen] = useState(false);
   const [headerScrolled, setHeaderScrolled] = useState(false);
 
   // Monitor scroll for sticky header styling
@@ -79,10 +78,6 @@ export default function App() {
                 <i className="fas fa-utensils"></i>
                 <span>{t.orderNow}</span>
               </a>
-              <button className="btn btn-secondary" onClick={() => setMenuModalOpen(true)}>
-                <i className="fas fa-file-invoice"></i>
-                <span>{t.viewMenuImg}</span>
-              </button>
             </div>
           </div>
           <div className="hero-features">
@@ -101,16 +96,6 @@ export default function App() {
         <h2 className="section-title">{t.categoriesTitle}</h2>
         <p className="section-subtitle">{t.categoriesSubtitle}</p>
         
-        {/* Scanned sheet box indicator */}
-        <div className="menu-image-trigger-box">
-          <div>
-            <h4>纸质菜单扫描件 / Scanned Menu Sheet</h4>
-            <p style={{ marginTop: '5px' }}>{t.originalMenuDesc}</p>
-          </div>
-          <button className="btn-outline-brown" onClick={() => setMenuModalOpen(true)}>
-            <i className="fas fa-image"></i> <span>{t.btnViewSheet}</span>
-          </button>
-        </div>
 
         {/* Categories filters tabs bar */}
         <div className="menu-categories">
@@ -285,13 +270,6 @@ export default function App() {
         </div>
       </footer>
 
-      {/* Menu Image Modal overlay */}
-      <div className={`image-modal ${menuModalOpen ? 'open' : ''}`} onClick={(e) => (e.target.id === 'image-modal' || e.target.classList.contains('btn-close-modal')) && setMenuModalOpen(false)}>
-        <div className="image-modal-content">
-          <button className="btn-close-modal">&times;</button>
-          <img src="images/menu-1.png" alt="Super Chicken Printed Menu Scanned Sheet" />
-        </div>
-      </div>
     </div>
   );
 }

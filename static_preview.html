@@ -863,10 +863,6 @@
             <i class="fas fa-utensils"></i>
             <span id="order-now-btn-txt">Explore Menu</span>
           </a>
-          <button class="btn btn-secondary" id="btn-open-menu-modal" onclick="openMenuModal()">
-            <i class="fas fa-file-invoice"></i>
-            <span id="view-menu-btn-txt">View Scanned Menu</span>
-          </button>
         </div>
       </div>
       <div class="hero-features">
@@ -885,16 +881,6 @@
     <h2 class="section-title" id="menu-section-title">Explore Our Menu</h2>
     <p class="section-subtitle" id="menu-section-subtitle">Freshly prepared chicken cooked in trans-fat free oils. Browse our selections below!</p>
     
-    <!-- Cross-Reference Box -->
-    <div class="menu-image-trigger-box">
-      <div>
-        <h4 id="cross-ref-title">纸质菜单扫描件 / Scanned Menu Sheet</h4>
-        <p id="cross-ref-desc" style="margin-top: 5px;">Would you like to cross-reference our prices and items with the original physical menu printed sheet?</p>
-      </div>
-      <button class="btn-outline-brown" id="btn-open-menu-sheet" onclick="openMenuModal()">
-        <i class="fas fa-image"></i> <span id="open-menu-img-btn-txt">Open Menu Image</span>
-      </button>
-    </div>
 
     <!-- Category Tabs -->
     <div class="menu-categories" id="category-tabs-container">
@@ -987,13 +973,6 @@
     </div>
   </footer>
 
-  <!-- Original Menu Sheet Image Modal -->
-  <div class="image-modal" id="image-modal" onclick="closeMenuModalOnOverlay(event)">
-    <div class="image-modal-content">
-      <button class="btn-close-modal" onclick="closeMenuModal()">&times;</button>
-      <img src="images/menu-1.png" alt="Super Chicken Printed Menu Scanned Sheet">
-    </div>
-  </div>
 
   <!-- Pure JavaScript Logic (No React, No Babel, works locally) -->
   <script>
@@ -1006,7 +985,6 @@
         heroTitle: "Experience the Ultimate <span>Super Chicken</span> Taste!",
         heroSubtitle: "Premium recipe fried chicken, hand-breaded and cooked to golden perfection. Visit us today for hot, fresh takeout!",
         orderNow: "Explore Menu",
-        viewMenuImg: "View Scanned Menu",
         categoriesTitle: "Explore Our Menu",
         categoriesSubtitle: "Freshly prepared chicken cooked in trans-fat free oils. Browse our selections below!",
         catAll: "All Items",
@@ -1014,9 +992,6 @@
         catSandwiches: "Sandwiches & Cuts",
         catSides: "Sides & Wings",
         catCombos: "Value Combos",
-        originalMenuTitle: "Scanned Menu Sheet",
-        originalMenuDesc: "Would you like to cross-reference our prices and items with the original physical menu printed sheet?",
-        btnViewSheet: "Open Menu Image",
         locationTitle: "Location & Pickup",
         hoursTitle: "Business Hours",
         contactTitle: "Call for Orders",
@@ -1038,7 +1013,6 @@
         heroTitle: "体验极致的 <span>超级炸鸡</span> 美味！",
         heroSubtitle: "优质配方炸鸡，手工裹粉，炸至金黄酥脆。欢迎光临选购新鲜美味外卖！",
         orderNow: "浏览菜单",
-        viewMenuImg: "查看纸质菜单",
         categoriesTitle: "探索我们的菜单",
         categoriesSubtitle: "使用无反式脂肪油新鲜烹制的炸鸡。请在下方浏览我们的美食选项！",
         catAll: "全部菜单",
@@ -1046,9 +1020,6 @@
         catSandwiches: "汉堡与鸡排",
         catSides: "小吃与鸡翅",
         catCombos: "超值套餐",
-        originalMenuTitle: "纸质菜单扫描件",
-        originalMenuDesc: "想参考店内纸质菜单印刷版的价格与项目吗？",
-        btnViewSheet: "打开菜单图片",
         locationTitle: "取餐地址",
         hoursTitle: "营业时间",
         contactTitle: "电话订餐",
@@ -1353,12 +1324,8 @@
       document.getElementById("hero-headline").innerHTML = t.heroTitle;
       document.getElementById("hero-subtext").textContent = t.heroSubtitle;
       document.getElementById("order-now-btn-txt").textContent = t.orderNow;
-      document.getElementById("view-menu-btn-txt").textContent = t.viewMenuImg;
       document.getElementById("menu-section-title").textContent = t.categoriesTitle;
       document.getElementById("menu-section-subtitle").textContent = t.categoriesSubtitle;
-      document.getElementById("cross-ref-title").textContent = currentLanguage === 'en' ? '纸质菜单扫描件 / Scanned Menu Sheet' : '纸质菜单扫描件';
-      document.getElementById("cross-ref-desc").textContent = t.originalMenuDesc;
-      document.getElementById("open-menu-img-btn-txt").textContent = t.btnViewSheet;
       document.getElementById("info-loc-title").textContent = t.locationTitle;
       document.getElementById("info-loc-desc").textContent = t.locDesc;
       document.getElementById("info-hours-title").textContent = t.hoursTitle;
@@ -1486,19 +1453,7 @@
       });
     }
 
-    function openMenuModal() {
-      document.getElementById("image-modal").classList.add("open");
-    }
 
-    function closeMenuModal() {
-      document.getElementById("image-modal").classList.remove("open");
-    }
-
-    function closeMenuModalOnOverlay(e) {
-      if (e.target.id === "image-modal") {
-        closeMenuModal();
-      }
-    }
   </script>
 </body>
 </html>
